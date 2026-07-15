@@ -2,27 +2,29 @@ package org.example.modelo;
 
 import java.util.Locale;
 
-public class Alumno {
+public class Alumno extends PersonaUT implements Ensenable, Evaluable {
     private int numeroExpediente;
-    private String nombre;
     private int edad;
     private String carrera;
     private int cuatrimestre;
 
-    private boolean resgistroCorrecto = false;
 
+    private boolean resgistroCorrecto = false;
     private static final String[] CARRERAS_VALIDAS = {"TI", "Qui", "Mec", "Mkt"};
 
     public Alumno() {
+        super();
     }
 
-    public Alumno(int numeroExpediente, String nombre, int edad, String carrera, int cuatrimestre) {
+    public Alumno(int numeroExpediente, String nombre, String curp, int edad, String carrera, int cuatrimestre) {
+        super(nombre, curp);
         setNumeroExpediente(numeroExpediente);
-        setNombre(nombre);
         setEdad(edad);
         setCarrera(carrera);
         setCuatrimestre(cuatrimestre);
+
     }
+
 
     public int getNumeroExpediente() {
         return numeroExpediente;
@@ -32,28 +34,13 @@ public class Alumno {
         this.numeroExpediente = numeroExpediente;
     }
 
-    public String getNombre() {
-        return nombre.toUpperCase(Locale.ROOT);
-    }
-
-    public void setNombre(String nombre) {
-        if (nombre.isBlank() || nombre.isEmpty()) {
-            System.out.println("Error, el nombre es requerido");
-        } else {
-            this.nombre = nombre;
-
-        }
-    }
-
     public int getEdad() {
         return edad;
-
     }
 
     public void setEdad(int edad) {
         if (edad > 15 && edad < 110) {
-            this.edad =edad;
-
+            this.edad = edad;
         } else {
             System.out.println("La edad debe de estar entre 15 y 110 años de edad");
         }
@@ -66,9 +53,8 @@ public class Alumno {
     public void setCarrera(String carrera) {
         if (validarCarreras(carrera)) {
             this.carrera = carrera;
-        }
-        else {
-            System.out.println("Carrera invalilda");
+        } else {
+            System.out.println("Carrera inválida");
         }
     }
 
@@ -77,29 +63,48 @@ public class Alumno {
     }
 
     public void setCuatrimestre(int cuatrimestre) {
-        if (cuatrimestre>0 && cuatrimestre<12) {
+        if (cuatrimestre > 0 && cuatrimestre < 12) {
             this.cuatrimestre = cuatrimestre;
-        }
-        else {
+        } else {
             System.out.println("El cuatrimestre debe de ser entre 1 y 11");
         }
     }
 
+    public boolean validarCarreras(String carrera) {
+        if (carrera == null) return false;
+        for (String validar : Alumno.CARRERAS_VALIDAS) {
+            if (carrera.equalsIgnoreCase(validar)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public String mostrarTipoPersona() {
+        return "----- ALUMNO -----";
+    }
+
     @Override
     public String toString() {
-        return "numeroExpediente: " + numeroExpediente+'\n'+
-                "nombre: "+ nombre+ '\n'+
-                "edad: "+ edad + '\n'+
-                "Carrera: " + carrera + '\n'+
-                "Cuatrimestre: " + cuatrimestre + '\n'+
+        return mostrarTipoPersona() + "\n" +
+                super.toString() +
+                "Número de Expediente: " + numeroExpediente + '\n' +
+                "Edad: " + edad + '\n' +
+                "Carrera: " + carrera + '\n' +
+                "Cuatrimestre: " + cuatrimestre + '\n' +
+                aprender() + "\n" +
+                recibirEvaluacion() + "\n" +
                 "--------------------------------------";
     }
-    public boolean validarCarreras(String carrera){
-        boolean carreraValida=false;
-        for(String validar : Alumno.CARRERAS_VALIDAS)
-            if (carrera.equalsIgnoreCase(validar)) {
-                return true;}
 
-        return carreraValida;
+    @Override
+    public String aprender() {
+        return "El alumno esta aprendiendo";
+    }
+
+    @Override
+    public String recibirEvaluacion() {
+        return "El alumno esta siendo evaluado" ;
     }
 }

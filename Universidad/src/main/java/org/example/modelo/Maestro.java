@@ -1,40 +1,40 @@
 package org.example.modelo;
 
-public class Maestro {
+public class Maestro extends PersonaUT implements Ensenador, Evaluador{
     private int numEmpleado;
     private int edad;
     private String cedulaProfecional;
-    private String nombre;
+    private String puesto;
+
 
     private boolean registroMaestro = false;
     private static final String[] PUESTOS_VALIDOS = {"Tutor", "Asesor", "Coordinador"};
 
 
-    public Maestro(){
+    public Maestro() {
+        super();
 
     }
 
-    public Maestro(int numEmpleado, int edad, String puesto, String cedProfecional, String nombre) {
+
+
+    public Maestro(int numEmpleado, int edad,  String curp, String cedProfecional, String nombre, String puesto) {
+        super(nombre, curp);
         setNumEmpleado(numEmpleado);
         setEdad(edad);
         setCedProfecional(cedProfecional);
-        setNombre(nombre);
+        setPuesto(puesto);
+    }
+    @Override
+    public String mostrarTipoPersona() {
+
+        return "----- PROFESOR -----";
     }
 
-    public String getNombre() {
-        return nombre;
-    }
 
-    public void setNombre(String nombre) {
-        if(nombre.isBlank() || nombre.isEmpty()){
-            System.out.println("El nombre es requerido");
-        }else{
-            this.nombre=nombre;
-            registroMaestro = true;
-        }
-    }
 
     public int getNumEmpleado() {
+
         return numEmpleado;
     }
 
@@ -47,6 +47,7 @@ public class Maestro {
     }
 
     public int getEdad() {
+
         return edad;
     }
 
@@ -61,19 +62,56 @@ public class Maestro {
 
 
     public String getCedProfecional() {
+
         return cedulaProfecional;
     }
 
     public void setCedProfecional(String cedProfecional) {
+
         this.cedulaProfecional = cedProfecional;
+    }
+
+    public String getPuesto() {
+        return puesto;
+    }
+
+    public void setPuesto(String puesto) {
+        this.puesto = puesto;
+    }
+
+    public boolean validar_puesto(String puesto){
+        if (puesto == null) return false;
+        for (String validar : Maestro.PUESTOS_VALIDOS) {
+            if (puesto.equalsIgnoreCase(validar)) {
+                return true;
+            }
+        }
+        return false;
+
     }
 
     @Override
     public String toString() {
-        return "nombre: " + nombre + '\n' +
+        return mostrarTipoPersona() + "\n" +
+                super.toString() +
                 "numEmpleado: " + numEmpleado + "\n" +
                 "edad: " + edad + "\n" +
-                "cedProfecional: " + cedulaProfecional;
-
+                "cedProfecional: " + cedulaProfecional + "\n" +
+                "puesto: " + puesto + "\n" +
+                ensenar() + "\n" +
+                evaluar() + "\n" +
+                "----------------------------------";
     }
+
+    @Override
+    public String ensenar() {
+        return "El maestro esta enseñando " ;
+    }
+
+
+    @Override
+    public String evaluar() {
+        return "El maestro esta evaluando " ;
+    }
+
 }

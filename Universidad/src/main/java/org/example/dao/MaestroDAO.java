@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class MaestroDAO {
     public boolean nuevoMaestro(Maestro maestro) {
         boolean registrado = false;
-        String sql = "INSERT INTO maestros VALUES(?,?,?,?)";
+        String sql = "INSERT INTO maestros VALUES(?,?,?,?,?,?)";
 
         try(Connection conexion = Conexion.conectar();
             PreparedStatement stm = conexion.prepareStatement(sql)) {
@@ -21,6 +21,8 @@ public class MaestroDAO {
             stm.setString(2, maestro.getNombre());
             stm.setInt(3, maestro.getEdad());
             stm.setString(4, maestro.getCedProfecional());
+            stm.setString(5, maestro.getCurp());
+            stm.setString(6, maestro.getPuesto());
 
             stm.executeUpdate();
             registrado = true;
@@ -34,7 +36,8 @@ public class MaestroDAO {
 
     public boolean updateMae(Maestro maestro){
         boolean actualizado = false;
-        String sql = "UPDATE maestros SET edad = ?, nombre = ?, puesto = ?, cedprofecional = ? WHERE numEmpleado = ?";
+
+        String sql = "UPDATE maestros SET edad = ?, nombre = ?, cedulaProfesional = ?, curp = ?, puesto =? WHERE numEmpleado = ?";
 
         try(Connection conexion = Conexion.conectar();
             PreparedStatement stm = conexion.prepareStatement(sql)) {
@@ -42,7 +45,10 @@ public class MaestroDAO {
             stm.setInt(1, maestro.getEdad());
             stm.setString(2, maestro.getNombre());
             stm.setString(3, maestro.getCedProfecional());
-            stm.setInt(4, maestro.getNumEmpleado());
+
+            stm.setString(4, maestro.getCurp());
+            stm.setString(5, maestro.getPuesto());
+            stm.setInt(6, maestro.getNumEmpleado());
 
             int registrosAfectados = stm.executeUpdate();
             if (registrosAfectados > 0){
@@ -57,7 +63,6 @@ public class MaestroDAO {
         }
         return actualizado;
     }
-
     public boolean deleteMae(Maestro maestro){
         boolean maestroEliminado = false;
         String sql = "DELETE FROM maestros WHERE numEmpleado = ?";
@@ -94,6 +99,8 @@ public class MaestroDAO {
                 maestro.setNombre(rs.getString("nombre"));
                 maestro.setEdad(rs.getInt("edad"));
                 maestro.setCedProfecional(rs.getString("cedulaProfesional"));
+                maestro.setCurp(rs.getString("curp"));
+                maestro.setPuesto(rs.getString("puesto"));
 
                 maestroBD.add(maestro);
             }
@@ -120,6 +127,9 @@ public class MaestroDAO {
                     maestro2.setNombre(rs.getString("nombre"));
                     maestro2.setEdad(rs.getInt("edad"));
                     maestro2.setCedProfecional(rs.getString("cedulaProfesional"));
+                    maestro2.setCurp(rs.getString("curp"));
+                    maestro.setPuesto(rs.getString("puesto"));
+
 
                     maestroBD2.add(maestro2);
                 }
